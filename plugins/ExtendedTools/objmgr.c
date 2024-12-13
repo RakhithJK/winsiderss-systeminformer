@@ -2264,7 +2264,7 @@ VOID NTAPI EtpObjectManagerObjectProperties(
     }
 
     objectContext.CurrentPath = PhReferenceObject(context->CurrentPath);
-    objectContext.Object = PhReferenceObject(Entry);
+    objectContext.Object = Entry;
     objectContext.FullName = NULL;
 
     if (Entry->EtObjectType == EtObjectDirectory)
@@ -2369,7 +2369,6 @@ VOID NTAPI EtpObjectManagerObjectProperties(
     // Object Manager plugin window
     PhShowHandlePropertiesEx(context->WindowHandle, processId, handleItem, PluginInstance, PhGetString(Entry->TypeName));
 
-    PhDereferenceObject(Entry);
     PhDereferenceObject(objectContext.CurrentPath);
 }
 
@@ -2679,7 +2678,7 @@ VOID NTAPI EtpObjectManagerSearchControlCallback(
     else
         oldSelect = PhReferenceObject(context->CurrentPath);
 
-    PhSetDialogItemText(context->WindowHandle, IDC_OBJMGR_PATH, PhGetString(oldSelect));
+    PhSetWindowText(context->PathControlHandle, PhGetString(oldSelect));
     PhDereferenceObject(oldSelect);
 
     WCHAR string[PH_INT32_STR_LEN_1];
@@ -2756,7 +2755,7 @@ VOID EtpObjectManagerCopyObjectAddress(
     }
 
     objectContext.CurrentPath = PhReferenceObject(context->CurrentPath);
-    objectContext.Object = PhReferenceObject(Entry);
+    objectContext.Object = Entry;
     objectContext.FullName = NULL;
 
     if (NT_SUCCESS(status = EtObjectManagerOpenHandle(&objectHandle, &objectContext, READ_CONTROL, OBJECT_OPENSOURCE_ALL)) ||
@@ -2796,7 +2795,6 @@ VOID EtpObjectManagerCopyObjectAddress(
 cleanup_exit:
     PhSetClipboardString(context->WindowHandle, &pointer);
 
-    PhDereferenceObject(Entry);
     PhDereferenceObject(objectContext.CurrentPath);
 }
 
@@ -2815,7 +2813,7 @@ VOID EtpObjectEntryDeleteProcedure(
     PhClearReference(&entry->BaseDirectory);
 }
 
-VOID EtpLoadComboBoxHistoryToSettings(
+VOID EtpLoadComboBoxHistoryFromSettings(
     _In_ PET_OBJECT_CONTEXT Context
     )
 {
@@ -3010,7 +3008,7 @@ INT_PTR CALLBACK WinObjDlgProc(
             if (PhIsNullOrEmptyString(Target))  // HACK
                 Target = PH_AUTO(PhCreateString2(&EtObjectManagerRootDirectoryObject));
 
-            EtpLoadComboBoxHistoryToSettings(context);
+            EtpLoadComboBoxHistoryFromSettings(context);
 
             context->DisableSelChanged = TRUE;
             EtpObjectManagerOpenTarget(context, Target);
