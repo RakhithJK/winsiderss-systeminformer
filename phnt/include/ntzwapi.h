@@ -326,7 +326,7 @@ ZwAllocateUserPhysicalPagesEx(
     _In_ HANDLE ProcessHandle,
     _Inout_ PULONG_PTR NumberOfPages,
     _Out_writes_(*NumberOfPages) PULONG_PTR UserPfnArray,
-    _Inout_updates_opt_(ParameterCount) PMEM_EXTENDED_PARAMETER ExtendedParameters,
+    _Inout_updates_opt_(ExtendedParameterCount) PMEM_EXTENDED_PARAMETER ExtendedParameters,
     _In_ ULONG ExtendedParameterCount
     );
 
@@ -3635,9 +3635,9 @@ NTSTATUS
 NTAPI
 ZwReadVirtualMemory(
     _In_ HANDLE ProcessHandle,
-    _In_opt_ PVOID BaseAddress,
-    _Out_writes_bytes_(BufferSize) PVOID Buffer,
-    _In_ SIZE_T BufferSize,
+    _In_ PVOID BaseAddress,
+    _Out_writes_bytes_to_(NumberOfBytesToRead, *NumberOfBytesRead) PVOID Buffer,
+    _In_ SIZE_T NumberOfBytesToRead,
     _Out_opt_ PSIZE_T NumberOfBytesRead
     );
 
@@ -3646,9 +3646,9 @@ NTSTATUS
 NTAPI
 ZwReadVirtualMemoryEx(
     _In_ HANDLE ProcessHandle,
-    _In_opt_ PVOID BaseAddress,
-    _Out_writes_bytes_(BufferSize) PVOID Buffer,
-    _In_ SIZE_T BufferSize,
+    _In_ PVOID BaseAddress,
+    _Out_writes_bytes_to_(NumberOfBytesToRead, *NumberOfBytesRead) PVOID Buffer,
+    _In_ SIZE_T NumberOfBytesToRead,
     _Out_opt_ PSIZE_T NumberOfBytesRead,
     _In_ ULONG Flags
     );
@@ -4980,9 +4980,9 @@ NTSTATUS
 NTAPI
 ZwWriteVirtualMemory(
     _In_ HANDLE ProcessHandle,
-    _In_opt_ PVOID BaseAddress,
-    _In_reads_bytes_(BufferSize) PVOID Buffer,
-    _In_ SIZE_T BufferSize,
+    _In_ PVOID BaseAddress,
+    _In_reads_bytes_(NumberOfBytesToWrite) PVOID Buffer,
+    _In_ SIZE_T NumberOfBytesToWrite,
     _Out_opt_ PSIZE_T NumberOfBytesWritten
     );
 
