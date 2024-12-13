@@ -3896,8 +3896,6 @@ HRESULT CALLBACK PhpUiServiceInitializeDialogCallbackProc(
             {
                 PhShowServiceProgressDialogStatusPage(context);
             }
-
-            PhInitializeWindowTheme(WindowHandle, !!PhGetIntegerSetting(L"EnableThemeSupport"));
         }
         break;
     }
